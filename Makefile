@@ -37,8 +37,8 @@ OBJS = \
  ethernet.o \
  ipv4.o
 
-LDFLAGS = -g -lm $(PROFILE_FLAGS) $(ARCH_FLAGS)
-LIBOPTS = -L$(LIBDIR) -ltstools $(ARCH_FLAGS)
+LDFLAGS = -g  $(PROFILE_FLAGS) $(ARCH_FLAGS)
+LIBOPTS = -L$(LIBDIR) -ltstools $(ARCH_FLAGS)  -lm
 
 all:	$(BINDIR) $(LIBDIR) $(OBJDIR) $(PROGS)
 
