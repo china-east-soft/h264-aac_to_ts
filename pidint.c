@@ -313,7 +313,7 @@ extern int same_pidint_list(pidint_list_p  list1,
 extern void report_stream_list(pidint_list_p  list,
                                char           *prefix)
 {
-  if (prefix!=NULL) printf(prefix);
+  if (prefix!=NULL) printf("%s", prefix);
   if (list == NULL)
     printf("Program stream list is NULL\n");
   else if (list->length == 0)
@@ -324,7 +324,7 @@ extern void report_stream_list(pidint_list_p  list,
     printf("Program streams:\n");
     for (ii=0; ii<list->length; ii++)
     {
-      if (prefix!=NULL) printf(prefix);
+      if (prefix!=NULL) printf("%s", prefix);
       printf("    PID %04x (%d) -> Stream type %3d (%s)\n",
              list->pid[ii],list->pid[ii],list->number[ii],
              h222_stream_type_str(list->number[ii]));
@@ -721,7 +721,7 @@ extern void report_pmt(FILE   *stream,
                        char   *prefix,
                        pmt_p   pmt)
 {
-  if (prefix!=NULL) fprintf(stream,prefix);
+  if (prefix!=NULL) fprintf(stream,"%s",prefix);
   if (pmt == NULL)
   {
     fprintf(stream,"PMT is NULL\n");
@@ -733,7 +733,7 @@ extern void report_pmt(FILE   *stream,
 
   if (pmt->program_info_length > 0)
   {
-    if (prefix!=NULL) fprintf(stream,prefix);
+    if (prefix!=NULL) fprintf(stream,"%s", prefix);
     print_data(stream,"   Program info",pmt->program_info,
                pmt->program_info_length,pmt->program_info_length);
     print_descriptors(stream,prefix,"   ",pmt->program_info,
@@ -742,11 +742,11 @@ extern void report_pmt(FILE   *stream,
   if (pmt->num_streams > 0)
   {
     int ii;
-    if (prefix!=NULL) fprintf(stream,prefix);
+    if (prefix!=NULL) fprintf(stream,"%s",prefix);
     fprintf(stream,"Program streams:\n");
     for (ii=0; ii<pmt->num_streams; ii++)
     {
-      if (prefix!=NULL) fprintf(stream,prefix);
+      if (prefix!=NULL) fprintf(stream,"%s",prefix);
       fprintf(stream,"  PID %04x (%4d) -> Stream type %02x (%3d) %s\n",
               pmt->streams[ii].elementary_PID,
               pmt->streams[ii].elementary_PID,
@@ -755,7 +755,7 @@ extern void report_pmt(FILE   *stream,
               h222_stream_type_str(pmt->streams[ii].stream_type));
       if (pmt->streams[ii].ES_info_length > 0)
       {
-        if (prefix!=NULL) fprintf(stream,prefix);
+        if (prefix!=NULL) fprintf(stream,"%s",prefix);
         print_data(stream,"      ES info",
                    pmt->streams[ii].ES_info,
                    pmt->streams[ii].ES_info_length,

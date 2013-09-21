@@ -97,7 +97,7 @@ extern void print_h262_start_code_str(FILE  *stream,
   }
 
   if (str != NULL)
-    fprintf(stream,str);
+    fprintf(stream,"%s", str);
   else if (start_code == 0x47)
     fprintf(stream,"TRANSPORT STREAM sync byte");
   else if (start_code >= 0x01 && start_code <= 0xAF)
