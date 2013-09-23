@@ -120,6 +120,18 @@ static int is_I_or_IDR_frame(access_unit_p  frame)
           (frame->primary_start->nal_unit_type == NAL_IDR ||
            all_slices_I(frame)));
 }
+
+static int is_I_or_P_or_IDR_frame(access_unit_p  frame)
+{
+  return (frame->primary_start != NULL &&
+          frame->primary_start->nal_ref_idc != 0 &&
+          (frame->primary_start->nal_unit_type == NAL_IDR ||
+           all_slices_P(frame)||
+           all_slices_I(frame)));
+}
+
+
+
 
 /*
  * Merge the given elementary streams to the given output.
@@ -147,7 +159,8 @@ static int merge_with_avs(avs_context_p  video_context,
   int audio_frame_count = 0;
 
   uint32_t video_pts_increment = (uint32_t)(90000.0 / video_frame_rate);
-  uint32_t audio_pts_increment = (90000 * audio_samples_per_frame) / audio_sample_rate;
+  //uint32_t audio_pts_increment = (90000 * audio_samples_per_frame) / audio_sample_rate;
+  uint32_t audio_pts_increment = (uint32_t)(90000.0 / video_frame_rate);
   uint64_t video_pts = 0;
   uint64_t audio_pts = 0;
 
@@ -383,7 +396,7 @@ static int merge_with_h264(access_unit_context_p  video_context,
   int audio_frame_count = 0;
 
   uint32_t video_pts_increment = 90000 / video_frame_rate;
-  uint32_t audio_pts_increment = (90000 * audio_samples_per_frame) / audio_sample_rate;
+  uint32_t audio_pts_increment = 96000   / video_frame_rate;
   uint64_t video_pts = 0;
   uint64_t audio_pts = 0;
 
@@ -497,10 +510,10 @@ static int merge_with_h264(access_unit_context_p  video_context,
 
       // We could output the timing information every video frame,
       // but might as well only do it on index frames.
-      if (is_I_or_IDR_frame(access_unit))
+      if (is_I_or_P_or_IDR_frame(access_unit))
         err = write_access_unit_as_TS_with_pts_dts(access_unit,video_context,
                                                    output,DEFAULT_VIDEO_PID,
-                                                   TRUE,video_pts+45000,
+                                                   TRUE,video_pts,
                                                    TRUE,video_pts);
       else
         err = write_access_unit_as_TS_with_PCR(access_unit,video_context,
